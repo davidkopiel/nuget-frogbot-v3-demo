@@ -1,4 +1,4 @@
-# nuget-frogbot-v3-demo
+# nuget-frogbot-v3-demo.
 
 A minimal .NET console app with a NuGet dependency, set up to be scanned by [JFrog Frogbot v3](https://docs.jfrog.com/security/docs/frogbot-v3).
 
