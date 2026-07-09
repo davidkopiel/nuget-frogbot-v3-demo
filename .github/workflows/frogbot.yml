@@ -1,0 +1,64 @@
+# Frogbot v3 security scan.
+# Docs: https://docs.jfrog.com/security/docs/frogbot-v3
+#
+# Required repository secrets (Settings > Secrets and variables > Actions):
+#   JF_URL            JFrog platform URL
+#   JF_ACCESS_TOKEN   JFrog access token (OIDC is recommended instead)
+#
+# JF_GIT_TOKEN uses the auto-generated GITHUB_TOKEN, no setup needed.
+name: "Frogbot Security Scan"
+
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  pull-requests: write
+  contents: write
+  security-events: write
+
+jobs:
+  pr-security-scan:
+    if: github.event_name == 'pull_request_target'
+    runs-on: ubuntu-latest
+    # A GitHub environment named "frogbot" lets designated reviewers approve
+    # scans on pull requests from forks. See installation.md in Frogbot docs.
+    environment: frogbot
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: jfrog/frogbot@v3
+        env:
+          JF_URL: ${{ secrets.JF_URL }}
+          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+          JF_GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JF_GIT_PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
+          JF_GIT_BASE_BRANCH: ${{ github.event.pull_request.base.ref }}
+          FROGBOT_CMD: "scan-pull-request"
+
+  repository-scan:
+    if: github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        branch: ["main"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.branch }}
+
+      - uses: jfrog/frogbot@v3
+        env:
+          JF_URL: ${{ secrets.JF_URL }}
+          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+          JF_GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JF_GIT_BASE_BRANCH: ${{ matrix.branch }}
+          FROGBOT_CMD: "scan-repository"
