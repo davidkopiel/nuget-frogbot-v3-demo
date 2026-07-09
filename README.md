@@ -19,4 +19,4 @@ Required repository secrets:
 | `JF_URL` | JFrog platform URL |
 | `JF_ACCESS_TOKEN` | JFrog access token (OIDC recommended) |
 
-`JF_GIT_TOKEN` uses the built-in `GITHUB_TOKEN` and needs no manual setup.
+`JF_GIT_TOKEN` uses the built-in `GITHUB_TOKEN` and needs no manual setup..
