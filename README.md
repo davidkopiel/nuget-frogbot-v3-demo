@@ -1,16 +1,20 @@
-<<<<<<< HEAD
-# nuget-frogbot-v3-demo.
-=======
-#jj:wq
- nuget-frogbot-v3-demo
->>>>>>> 3735467b49f024a6d09ba3810a5959670925c086
+# nuget-frogbot-v3-demo
 
-A minimal .NET console app with a NuGet dependency, set up to be scanned by [JFrog Frogbot v3](https://docs.jfrog.com/security/docs/frogbot-v3).
+A multi-package demo repo, set up to be scanned by [JFrog Frogbot v3](https://docs.jfrog.com/security/docs/frogbot-v3):
+
+- `src/NugetFrogbotV3Demo/` — the original .NET console app and its NuGet dependencies
+- `src/PaymentsService/`, `src/InventoryService/` — additional .NET solutions, to demo scanning a repo with multiple `.sln` files
+- `package.json` at the repo root — an npm package alongside the .NET solutions, to demo multi-ecosystem scanning in the same repo
 
 ## Run
 
 ```bash
-dotnet run
+# .NET
+dotnet run --project src/NugetFrogbotV3Demo
+
+# npm
+npm install
+npm start
 ```
 
 ## Frogbot

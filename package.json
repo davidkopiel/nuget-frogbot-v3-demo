@@ -1,0 +1,21 @@
+{
+  "name": "nuget-frogbot-v3-demo",
+  "version": "1.0.0",
+  "description": "npm side of the multi-package Frogbot v3 demo, alongside the .NET solutions under src/",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidkopiel/nuget-frogbot-v3-demo.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/davidkopiel/nuget-frogbot-v3-demo/issues"
+  },
+  "homepage": "https://github.com/davidkopiel/nuget-frogbot-v3-demo#readme",
+  "dependencies": {
+    "lodash": "4.17.15"
+  }
+}

@@ -41,13 +41,19 @@ jobs:
         run: jf dotnet-config --server-id-resolve=setup-jfrog-cli-server --repo-resolve=davidko-nuget-remote
 
       - name: jf dotnet restore
-        run: jf dotnet restore --build-name="${{ env.JFROG_CLI_BUILD_NAME }}" --build-number="${{ env.JFROG_CLI_BUILD_NUMBER }}"
+        run: |
+          for sln in src/*/*.sln; do
+            jf dotnet restore "$sln" --build-name="${{ env.JFROG_CLI_BUILD_NAME }}" --build-number="${{ env.JFROG_CLI_BUILD_NUMBER }}"
+          done
 
       - name: jf dotnet build
-        run: jf dotnet build --configuration Release --no-restore --build-name="${{ env.JFROG_CLI_BUILD_NAME }}" --build-number="${{ env.JFROG_CLI_BUILD_NUMBER }}"
+        run: |
+          for sln in src/*/*.sln; do
+            jf dotnet build "$sln" --configuration Release --no-restore --build-name="${{ env.JFROG_CLI_BUILD_NAME }}" --build-number="${{ env.JFROG_CLI_BUILD_NUMBER }}"
+          done
 
-    #  - name: jf audit
-     #   run: jf audit
+      #- name: jf audit
+       # run: jf audit
 
       - name: Publish build-info
         run: jf rt build-publish "${{ env.JFROG_CLI_BUILD_NAME }}" "${{ env.JFROG_CLI_BUILD_NUMBER }}"

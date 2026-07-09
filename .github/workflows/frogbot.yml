@@ -50,7 +50,10 @@ jobs:
         run: jf dotnet-config --server-id-resolve=setup-jfrog-cli-server --repo-resolve=davidko-nuget-remote
 
       - name: jf dotnet restore
-        run: jf dotnet restore
+        run: |
+          for sln in src/*/*.sln; do
+            jf dotnet restore "$sln"
+          done
 
       - uses: jfrog/frogbot@v3
         env:
@@ -87,7 +90,10 @@ jobs:
         run: jf dotnet-config --server-id-resolve=setup-jfrog-cli-server --repo-resolve=davidko-nuget-remote
 
       - name: jf dotnet restore
-        run: jf dotnet restore
+        run: |
+          for sln in src/*/*.sln; do
+            jf dotnet restore "$sln"
+          done
 
       - uses: jfrog/frogbot@v3
         env:
