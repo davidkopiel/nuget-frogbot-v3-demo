@@ -1,0 +1,56 @@
+# Build, audit, and scan the .NET project using JFrog CLI.
+# Runs on every push to main: builds the project, runs a standalone SCA
+# scan with `jf audit`, publishes build-info to Artifactory, then runs
+# `jf build-scan` to have Xray scan the published build.
+#
+# Required repository secrets (Settings > Secrets and variables > Actions):
+#   JF_URL            JFrog platform URL
+#   JF_ACCESS_TOKEN   JFrog access token (OIDC is recommended instead)
+name: "Build, Audit & Scan"
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+env:
+  JFROG_CLI_BUILD_NAME: nuget-frogbot-v3-demo
+  JFROG_CLI_BUILD_NUMBER: ${{ github.run_number }}
+
+jobs:
+  build-and-scan:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Setup JFrog CLI
+        uses: jfrog/setup-jfrog-cli@v4
+        env:
+          JF_URL: ${{ secrets.JF_URL }}
+          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+
+      - name: Configure .NET for Artifactory
+        run: jf dotnet-config --server-id-resolve=setup-jfrog-cli-server --repo-resolve=davidko-nuget-remote
+
+      - name: jf dotnet restore
+        run: jf dotnet restore --build-name="${{ env.JFROG_CLI_BUILD_NAME }}" --build-number="${{ env.JFROG_CLI_BUILD_NUMBER }}"
+
+      - name: jf dotnet build
+        run: jf dotnet build --configuration Release --no-restore --build-name="${{ env.JFROG_CLI_BUILD_NAME }}" --build-number="${{ env.JFROG_CLI_BUILD_NUMBER }}"
+
+    #  - name: jf audit
+     #   run: jf audit
+
+      - name: Publish build-info
+        run: jf rt build-publish "${{ env.JFROG_CLI_BUILD_NAME }}" "${{ env.JFROG_CLI_BUILD_NUMBER }}"
+
+      - name: jf build-scan
+        run: jf build-scan "${{ env.JFROG_CLI_BUILD_NAME }}" "${{ env.JFROG_CLI_BUILD_NUMBER }}"

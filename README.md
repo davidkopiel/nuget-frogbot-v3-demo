@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 # nuget-frogbot-v3-demo.
+=======
+#jj:wq
+ nuget-frogbot-v3-demo
+>>>>>>> 3735467b49f024a6d09ba3810a5959670925c086
 
 A minimal .NET console app with a NuGet dependency, set up to be scanned by [JFrog Frogbot v3](https://docs.jfrog.com/security/docs/frogbot-v3).
 
@@ -19,4 +24,4 @@ Required repository secrets:
 | `JF_URL` | JFrog platform URL |
 | `JF_ACCESS_TOKEN` | JFrog access token (OIDC recommended) |
 
-`JF_GIT_TOKEN` uses the built-in `GITHUB_TOKEN` and needs no manual setup.
+`JF_GIT_TOKEN` uses the built-in `GITHUB_TOKEN` and needs no manual setup..
