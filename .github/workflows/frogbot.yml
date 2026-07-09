@@ -40,8 +40,17 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      - name: dotnet restore
-        run: dotnet restore
+      - name: Setup JFrog CLI
+        uses: jfrog/setup-jfrog-cli@v4
+        env:
+          JF_URL: ${{ secrets.JF_URL }}
+          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+
+      - name: Configure .NET for Artifactory
+        run: jf dotnet-config --server-id-resolve=setup-jfrog-cli-server --repo-resolve=davidko-nuget-remote
+
+      - name: jf dotnet restore
+        run: jf dotnet restore
 
       - uses: jfrog/frogbot@v3
         env:
@@ -68,8 +77,17 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      - name: dotnet restore
-        run: dotnet restore
+      - name: Setup JFrog CLI
+        uses: jfrog/setup-jfrog-cli@v4
+        env:
+          JF_URL: ${{ secrets.JF_URL }}
+          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+
+      - name: Configure .NET for Artifactory
+        run: jf dotnet-config --server-id-resolve=setup-jfrog-cli-server --repo-resolve=davidko-nuget-remote
+
+      - name: jf dotnet restore
+        run: jf dotnet restore
 
       - uses: jfrog/frogbot@v3
         env:
