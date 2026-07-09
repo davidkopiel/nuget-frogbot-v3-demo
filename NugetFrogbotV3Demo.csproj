@@ -8,7 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- actions-runner/ is an unrelated self-hosted runner install; localsrc/ builds
+         its own project (Davidko.InternalUtils). Neither belongs in this project's glob. -->
+    <Compile Remove="actions-runner/**" />
+    <Compile Remove="localsrc/**" />
+    <None Remove="actions-runner/**" />
+    <None Remove="localsrc/**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Davidko.InternalUtils" Version="1.0.0" />
   </ItemGroup>
 
 </Project>
