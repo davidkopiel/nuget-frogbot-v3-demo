@@ -26,7 +26,7 @@ permissions:
 jobs:
   pr-security-scan:
     if: github.event_name == 'pull_request_target'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     # A GitHub environment named "frogbot" lets designated reviewers approve
     # scans on pull requests from forks. See installation.md in Frogbot docs.
     environment: frogbot
