@@ -49,6 +49,14 @@ jobs:
       - name: Configure .NET for Artifactory
         run: jf dotnet-config --server-id-resolve=setup-jfrog-cli-server --repo-resolve=davidko-nuget-remote
 
+      - name: Clean NuGet caches
+        # The runner is self-hosted, so these caches persist across runs.
+        # Clear them so restore always pulls from Artifactory instead of a
+        # locally cached copy from a previous job.
+        run: |
+          dotnet nuget locals all --clear
+          rm -rf src/*/obj src/*/bin
+
       - name: jf dotnet restore
         run: |
           for sln in src/*/*.sln; do
@@ -88,6 +96,14 @@ jobs:
 
       - name: Configure .NET for Artifactory
         run: jf dotnet-config --server-id-resolve=setup-jfrog-cli-server --repo-resolve=davidko-nuget-remote
+
+      - name: Clean NuGet caches
+        # The runner is self-hosted, so these caches persist across runs.
+        # Clear them so restore always pulls from Artifactory instead of a
+        # locally cached copy from a previous job.
+        run: |
+          dotnet nuget locals all --clear
+          rm -rf src/*/obj src/*/bin
 
       - name: jf dotnet restore
         run: |
